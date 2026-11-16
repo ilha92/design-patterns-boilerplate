@@ -1,21 +1,21 @@
-import { createApp } from "./app";
-import { loadConfig } from "./config";
+import { creerApplication } from "./app";
+import { chargerConfiguration } from "./config";
 
-const { port } = loadConfig();
-const server = createApp().listen(port, () => {
-    console.log(`HTTP server listening on port ${port}`);
+const { port } = chargerConfiguration();
+const serveur = creerApplication().listen(port, () => {
+    console.log(`Serveur HTTP en écoute sur le port ${port}`);
 });
 
-function shutdown(signal: string): void {
-    console.log(`${signal} received, shutting down`);
+function arreterServeur(signal: string): void {
+    console.log(`${signal} reçu, arrêt du serveur`);
 
-    server.close((error) => {
-        if (error !== undefined) {
-            console.error("Failed to close HTTP server", error);
+    serveur.close((erreur) => {
+        if (erreur !== undefined) {
+            console.error("Échec de l'arrêt du serveur HTTP", erreur);
             process.exitCode = 1;
         }
     });
 }
 
-process.once("SIGINT", () => shutdown("SIGINT"));
-process.once("SIGTERM", () => shutdown("SIGTERM"));
+process.once("SIGINT", () => arreterServeur("SIGINT"));
+process.once("SIGTERM", () => arreterServeur("SIGTERM"));

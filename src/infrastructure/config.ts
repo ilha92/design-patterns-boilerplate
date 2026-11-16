@@ -1,17 +1,17 @@
-export interface AppConfig {
+export interface ConfigurationApplication {
     readonly port: number;
 }
 
-function readPort(value: string | undefined): number {
+function lirePort(value: string | undefined): number {
     const port = Number(value ?? 3000);
 
     if (!Number.isInteger(port) || port < 1 || port > 65_535) {
-        throw new Error("PORT must be an integer between 1 and 65535");
+        throw new Error("PORT doit être un entier compris entre 1 et 65535");
     }
 
     return port;
 }
 
-export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
-    return { port: readPort(env.PORT) };
+export function chargerConfiguration(env: NodeJS.ProcessEnv = process.env): ConfigurationApplication {
+    return { port: lirePort(env.PORT) };
 }

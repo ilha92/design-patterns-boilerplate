@@ -78,6 +78,18 @@ Exprimez ces informations autant que possible dans les types, les signatures et 
 
 **Les ambiguïtés laissées dans les contrats font partie de l'évaluation.**
 
+## Utilisation de l'API
+
+Chaque cas d'utilisation est une fonction exportée depuis `src/domains/useCase/` et appelée par une route Express :
+
+- `POST /api/adherents` avec `{ "prenom": "Ada", "nom": "Lovelace", "courriel": "ada@example.test" }`. Renvoie `201` si l'inscription réussit, `409` si le courriel existe déjà, ou `400` si un champ requis n'est pas une chaîne.
+- `POST /api/emprunts` avec `{ "identifiantAdherent": "...", "identifiantExemplaire": "..." }`. Renvoie `201` si l'emprunt réussit, `404` si l'adhérent ou l'exemplaire n'existe pas, ou `409` si la limite est atteinte ou si l'exemplaire est indisponible.
+- `POST /api/retours` avec `{ "identifiantExemplaire": "..." }`. Renvoie `200` si le retour est enregistré, ou `404` s'il n'existe pas d'emprunt actif pour cet exemplaire.
+
+Les erreurs de format renvoient `400`. Les erreurs techniques inattendues renvoient `500`. `GET /health` reste disponible.
+
+Le serveur utilise un stockage en mémoire, réinitialisé à chaque redémarrage, et crée un exemplaire disponible nommé `exemplaire-1` pour permettre d'essayer le parcours complet. Pour une autre source de données, injecter une autre implémentation des ports dans `creerApplication`.
+
 ## Structure de départ
 
 - `src/domains/entities/` : entités métier.
